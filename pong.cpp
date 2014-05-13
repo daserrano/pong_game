@@ -14,12 +14,6 @@ typedef struct TCoordenada{
 
 } Coordenada; 
 
-struct TJugador{
-
-    Coordenada jugador[MAX];
-
-};
-
 void PintadoPresentacion(){
 
     system("clear");
@@ -69,9 +63,43 @@ void PintadoTablero(){
     fclose(fp);
 }
 
+void RellenarJugador(Coordenada jugador1[MAX]){
+
+    for(int i=0; i < MAX ; i++){
+	jugador1[i].x = 5;
+        jugador1[i].y = 5 + i;
+    }
+
+}
+
+void MuestraJugador(Coordenada jugador1[MAX]){
+    clear();
+    PintadoTablero();
+
+    for(int i=0; i < MAX; i++)
+	mvprintw(jugador1[i].y, jugador1[i].x, "|");
+
+    refresh();
+
+}
+
+void MoverJugador(Coordenada jugador1[MAX]){
+
+    for(int i= MAX-1; i>0; i--)
+	jugador1[i].y = jugador1[i-1].y;
+
+
+}
 void Juego(){
 
-    PintadoTablero();
+    Coordenada jugador1[MAX];
+
+    //PintadoTablero();
+
+    RellenarJugador(jugador1);
+    MuestraJugador(jugador1);
+    MoverJugador(jugador1);
+
 
 }
 
