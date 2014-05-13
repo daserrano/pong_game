@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
+
+#define MAXLINES 40
+#define ESC 27
+
+typedef struct TCoordenada{
+
+    double x;
+    double y;
+
+} Coordenada;
+
+void PintadoPresentacion(){
+
+}
+
+void PintadoTablero(){
+
+    system("clear");
+
+    char tablero[MAXLINES];
+    FILE *fp;
+
+    if ((fp = fopen ("pantalla.txt", "r")) ==  NULL) {
+	fprintf(stderr, "Error: %s NOT FOUND \n", "pantalla.txt");
+	exit(EXIT_FAILURE);
+    }
+
+    attron(COLOR_PAIR(1));
+
+    char pixel;
+    while( (pixel = fgetc(fp)) != EOF){
+	printw("%c", pixel);
+    }
+
+    attroff(COLOR_PAIR(1));
+
+    refresh();
+    fclose(fp);
+}
+
+void Juego(){
+
+    PintadoTablero();
+
+}
+
+int main(int argc, char *argv[]){
+
+    int user_input = 0;
+
+    initscr();
+    start_color();
+
+    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+
+    keypad(stdscr, TRUE);
+    noecho();
+    curs_set(0);
+
+    PintadoPresentacion();  // Sin hacer.
+
+   do{
+       Juego();
+
+   }while(user_input = getch() != ESC);
+   endwin();
+
+   return EXIT_SUCCESS;
+}
