@@ -29,7 +29,7 @@ void PintadoPresentacion(){
 
     char pixel;
     while( (pixel = fgetc(fp)) != EOF){
-	printw("%c", pixel);
+	    printw("%c", pixel);
     }
 
 
@@ -50,14 +50,26 @@ void PintadoTablero(){
 	exit(EXIT_FAILURE);
     }
 
-    attron(COLOR_PAIR(1));
+    //attron(COLOR_PAIR(1));
 
     char pixel;
     while( (pixel = fgetc(fp)) != EOF){
-	printw("%c", pixel);
+	if( pixel == '#'){
+	    attron(COLOR_PAIR(1));
+	    printw("%c", pixel);
+	    attroff(COLOR_PAIR(1));
+	}
+	else if( pixel == '|'){
+	    attron(COLOR_PAIR(2));
+	    printw("%c", pixel);
+	    attroff(COLOR_PAIR(2));
+	}
+	else
+	    printw("%c", pixel);
+
     }
 
-    attroff(COLOR_PAIR(1));
+    //attroff(COLOR_PAIR(1));
 
     refresh();
     fclose(fp);
@@ -67,7 +79,7 @@ void RellenarJugador(Coordenada jugador1[MAX]){
 
     for(int i=0; i < MAX ; i++){
 	jugador1[i].x = 5;
-        jugador1[i].y = 5 + i;
+	jugador1[i].y = 5 + i;
     }
 
 }
@@ -110,7 +122,8 @@ int main(int argc, char *argv[]){
     initscr();
     start_color();
 
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    init_pair(1, COLOR_BLUE, COLOR_BLUE);
+    init_pair(2, COLOR_WHITE, COLOR_WHITE);
 
     keypad(stdscr, TRUE);
     noecho();
