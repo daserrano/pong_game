@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <ctype.h>
 
 #define MAXLINES 40
 #define ESC 27
@@ -95,47 +96,55 @@ void MuestraJugador(Coordenada jugador1[MAX]){
 
 }
 
-void MoverJugador(Coordenada jugador1[MAX]){
+void MoverJugador(Coordenada jugador1[MAX], Coordenada incremento){
 
-    for(int i= MAX-1; i>0; i--)
+    for(int i= MAX-1; i>0; i--){
+	jugador1[i].x = jugador1[i-1].x;
 	jugador1[i].y = jugador1[i-1].y;
+    }
+    jugador1[0].x += incremento.x;
+    jugador1[0].y += incremento.y;
 
-
-}
-void Juego(){
-
-    Coordenada jugador1[MAX];
-
-    //PintadoTablero();
-
-    RellenarJugador(jugador1);
-    MuestraJugador(jugador1);
-    MoverJugador(jugador1);
-
-
-}
+}  
 
 int main(int argc, char *argv[]){
 
     int user_input = 0;
+    Coordenada jugador1[MAX];
+    Coordenada movimiento = {0 , 0};
 
-    initscr();
+    initscr(); // iniciar tablero de ncurses.
     start_color();
 
-    init_pair(1, COLOR_BLUE, COLOR_BLUE);
+    init_pair(1, COLOR_BLUE, COLOR_BLUE); // Colorear.
     init_pair(2, COLOR_WHITE, COLOR_WHITE);
 
-    keypad(stdscr, TRUE);
-    noecho();
-    curs_set(0);
+    //halfdelay(2);
+    keypad(stdscr, TRUE); // Poder utilizar las flechas.
+    noecho(); //No se muestre el caracter pulsado.
+    curs_set(0); // Desaparecer el puntero.
 
     PintadoPresentacion();  
-    getch();
+    while((user_input = getch()) != ESP){
+    }
     clear();
 
-    do{
-	Juego();
+    RellenarJugador(jugador1);
 
+    do{
+	switch(tolower(user_input)){    // es lo mismo mayuscula que minuscula.
+	    case 'w':
+		movimiento.x = 0;
+		movimiento.y = -1;
+		break;
+
+		 
+
+
+	}
+
+	    MoverJugador(jugador1, movimiento);
+	    MuestraJugador(jugador1);
     }while(user_input = getch() != ESC);
     endwin();
 
