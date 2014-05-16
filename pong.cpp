@@ -51,8 +51,6 @@ void PintadoTablero(){
 	exit(EXIT_FAILURE);
     }
 
-    //attron(COLOR_PAIR(1));
-
     char pixel;
     while( (pixel = fgetc(fp)) != EOF){
 	if( pixel == '#'){
@@ -80,7 +78,7 @@ void RellenarJugador(Coordenada jugador1[MAX]){
 
     for(int i=0; i < MAX ; i++){
 	jugador1[i].x = 5;
-	jugador1[i].y = 5 + i;
+	jugador1[i].y = 15 + i;
     }
 
 }
@@ -89,20 +87,21 @@ void MuestraJugador(Coordenada jugador1[MAX]){
     clear();
     PintadoTablero();
 
+    attron(COLOR_PAIR(2));
     for(int i=0; i < MAX; i++)
+	
 	mvprintw(jugador1[i].y, jugador1[i].x, "|");
 
+    attroff(COLOR_PAIR(2));
     refresh();
 
 }
 
 void MoverJugador(Coordenada jugador1[MAX], Coordenada incremento){
 
-    for(int i= MAX-1; i>0; i--){
-	jugador1[i].x = jugador1[i-1].x;
+    for(int i= MAX-1; i>0; i--)
 	jugador1[i].y = jugador1[i-1].y;
-    }
-    jugador1[0].x += incremento.x;
+
     jugador1[0].y += incremento.y;
 
 }  
@@ -111,7 +110,7 @@ int main(int argc, char *argv[]){
 
     int user_input = 0;
     Coordenada jugador1[MAX];
-    Coordenada movimiento = {0 , 0};
+    Coordenada movimiento = {0 , 1};
 
     initscr(); // iniciar tablero de ncurses.
     start_color();
@@ -124,29 +123,32 @@ int main(int argc, char *argv[]){
     noecho(); //No se muestre el caracter pulsado.
     curs_set(0); // Desaparecer el puntero.
 
+    RellenarJugador(jugador1);
+
     PintadoPresentacion();  
     while((user_input = getch()) != ESP){
     }
-    clear();
-
-    RellenarJugador(jugador1);
+    clear();   // Limpia la pantalla.
 
     do{
-	switch(tolower(user_input)){    // es lo mismo mayuscula que minuscula.
+	switch(tolower(user_input)){    // Es lo mismo mayuscula que minuscula.
 	    case 'w':
 		movimiento.x = 0;
 		movimiento.y = -1;
 		break;
 
-		 
-
+	    case 's':
+		movimiento.x = 0;
+		movimiento.y = 1;
+		break;
 
 	}
 
 	    MoverJugador(jugador1, movimiento);
 	    MuestraJugador(jugador1);
-    }while(user_input = getch() != ESC);
-    endwin();
 
+    }while(user_input = getch() != ESC);
+    endwin(); // Finaliza el tablero de ncurses.
+ 
     return EXIT_SUCCESS;
 }
