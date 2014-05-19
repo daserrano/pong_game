@@ -126,13 +126,12 @@ int main(int argc, char *argv[]){
     RellenarJugador(jugador1);
 
     PintadoPresentacion();  
-    user_input = getch();
-    while(user_input != ESP){
+    while((user_input = getch()) != ESP){
     }
     clear();   // Limpia la pantalla.
 
     do{
-	switch(tolower(user_input)){    // Es lo mismo mayuscula que minuscula.
+	switch(tolower(user_input = getch())){    // Es lo mismo mayuscula que minuscula.
 	    case 'w':
 		movimiento.x = 0;
 		movimiento.y = -1;
