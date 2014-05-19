@@ -126,7 +126,8 @@ int main(int argc, char *argv[]){
     RellenarJugador(jugador1);
 
     PintadoPresentacion();  
-    while((user_input = getch()) != ESP){
+    user_input = getch();
+    while(user_input != ESP){
     }
     clear();   // Limpia la pantalla.
 
