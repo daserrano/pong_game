@@ -90,7 +90,7 @@ void MuestraJugador(Coordenada jugador1[MAX]){
     attron(COLOR_PAIR(2));
     for(int i=0; i < MAX; i++)
 	
-	mvprintw(jugador1[i].y, jugador1[i].x, "|");
+	mvprintw(jugador1[i].y, jugador1[i].x, "||");
 
     attroff(COLOR_PAIR(2));
     refresh();
@@ -126,6 +126,7 @@ int main(int argc, char *argv[]){
     RellenarJugador(jugador1);
 
     PintadoPresentacion();  
+
     while((user_input = getch()) != ESP){
     }
     clear();   // Limpia la pantalla.
