@@ -74,11 +74,20 @@ void PintadoTablero(){
     fclose(fp);
 }
 
-void RellenarJugador(Coordenada jugador1[MAX]){
+void RellenarJugador1(Coordenada jugador1[MAX]){
 
     for(int i=0; i < MAX ; i++){
 	jugador1[i].x = 5;
 	jugador1[i].y = 15 + i;
+    }
+
+}
+
+void RellenarJugador2(Coordenada jugador2[MAX]){
+
+    for(int i=0; i < MAX ; i++){
+	jugador2[i].x = 30;
+	jugador2[i].y = 15 + i;
     }
 
 }
@@ -97,21 +106,35 @@ void MuestraJugador(Coordenada jugador1[MAX]){
 
 }
 
-void MoverJugadorArriba(Coordenada jugador1[MAX], Coordenada incremento){
+void MuestraJugador2(Coordenada jugador1[MAX]){
+    clear();
+    PintadoTablero();
 
-    for(int i= MAX-1; i>0; i--)
-	jugador1[i].y = jugador1[i-1].y;
+    attron(COLOR_PAIR(2));
+    for(int i=0; i < MAX; i++)
+	
+	mvprintw(jugador1[i].y, jugador1[i].x, "||");
 
-    jugador1[0].y += incremento.y;
+    attroff(COLOR_PAIR(2));
+    refresh();
 
 }
 
-void MoverJugadorAbajo(Coordenada jugador1[MAX], Coordenada incremento){
+void MoverJugadorArriba(Coordenada jugador[MAX], Coordenada incremento){
 
-    for(int i=0; i>MAX; i++)
-	jugador1[i-1].y = jugador1[i].y;
+    for(int i= MAX-1; i>0; i--)
+	jugador[i].y = jugador[i-1].y;
 
-    jugador1[MAX-1].y += incremento.y;
+    jugador[0].y += incremento.y;
+
+}
+
+void MoverJugadorAbajo(Coordenada jugador[MAX], Coordenada incremento){
+
+    for(int i=0; i<MAX; i++)
+	jugador[i-1].y = jugador[i].y;
+
+    jugador[MAX-1].y += incremento.y;
 
 }  
 
@@ -119,6 +142,7 @@ int main(int argc, char *argv[]){
 
     int user_input = 0;
     Coordenada jugador1[MAX];
+    Coordenada jugador2[MAX];
     Coordenada movimiento = {0 , 1};
 
     initscr(); // iniciar tablero de ncurses.
@@ -132,7 +156,8 @@ int main(int argc, char *argv[]){
     noecho(); //No se muestre el caracter pulsado.
     curs_set(0); // Desaparecer el puntero.
 
-    RellenarJugador(jugador1);
+    RellenarJugador1(jugador1);
+    RellenarJugador2(jugador2);
 
     PintadoPresentacion();  
 
@@ -154,10 +179,23 @@ int main(int argc, char *argv[]){
 		MoverJugadorAbajo(jugador1, movimiento);
 		break;
 
+	    case KEY_UP:
+		movimiento.x = 0;
+		movimiento.y = -1;
+		//MoverJugadorArriba(jugador2, movimiento);
+		break;
+
+	    case KEY_DOWN:
+		movimiento.x = 0;
+		movimiento.y = 1;
+		//MoverJugadorAbajo(jugador2, movimiento);
+		break;
+
 	}
 
 
 	MuestraJugador(jugador1);
+        //MuestraJugador2(jugador2);
 
     }while(user_input = getch() != ESC);
     endwin(); // Finaliza el tablero de ncurses.
