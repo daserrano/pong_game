@@ -97,12 +97,21 @@ void MuestraJugador(Coordenada jugador1[MAX]){
 
 }
 
-void MoverJugador(Coordenada jugador1[MAX], Coordenada incremento){
+void MoverJugadorArriba(Coordenada jugador1[MAX], Coordenada incremento){
 
     for(int i= MAX-1; i>0; i--)
 	jugador1[i].y = jugador1[i-1].y;
 
     jugador1[0].y += incremento.y;
+
+}
+
+void MoverJugadorAbajo(Coordenada jugador1[MAX], Coordenada incremento){
+
+    for(int i=0; i>MAX; i++)
+	jugador1[i-1].y = jugador1[i].y;
+
+    jugador1[MAX-1].y += incremento.y;
 
 }  
 
@@ -136,20 +145,22 @@ int main(int argc, char *argv[]){
 	    case 'w':
 		movimiento.x = 0;
 		movimiento.y = -1;
+		MoverJugadorArriba(jugador1, movimiento);
 		break;
 
 	    case 's':
 		movimiento.x = 0;
 		movimiento.y = 1;
+		MoverJugadorAbajo(jugador1, movimiento);
 		break;
 
 	}
 
-	    MoverJugador(jugador1, movimiento);
-	    MuestraJugador(jugador1);
+
+	MuestraJugador(jugador1);
 
     }while(user_input = getch() != ESC);
     endwin(); // Finaliza el tablero de ncurses.
- 
+
     return EXIT_SUCCESS;
 }
