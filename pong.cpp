@@ -10,8 +10,8 @@
 
 typedef struct TCoordenada{
 
-    double x;
-    double y;
+    int x;
+    int y;
 
 } Coordenada; 
 
@@ -69,7 +69,6 @@ void PintadoTablero(){
     }
 
     //attroff(COLOR_PAIR(1));
-
     refresh();
     fclose(fp);
 }
@@ -138,31 +137,13 @@ void MoverJugadorAbajo(Coordenada jugador[MAX], Coordenada incremento){
 
 }  
 
-void MoverJugador2Arriba(Coordenada jugador[MAX], Coordenada incremento){
-
-    for(int i= MAX-1; i>0; i--)
-	jugador[i].y = jugador[i-1].y;
-
-    jugador[0].y += incremento.y;
-
-}
-
-void MoverJugador2Abajo(Coordenada jugador[MAX], Coordenada incremento){
-
-    for(int i=0; i<MAX; i++)
-	jugador[i-1].y = jugador[i].y;
-
-    jugador[MAX-1].y += incremento.y;
-
-} 
-
 int main(int argc, char *argv[]){
 
     int user_input = 0;
     Coordenada jugador1[MAX];
     Coordenada jugador2[MAX];
     Coordenada movimiento1 = {0 , 1};
-    Coordenada movimiento2 = {0 , -1};
+    Coordenada movimiento2 = {0 , 1};
 
     initscr(); // iniciar tablero de ncurses.
     start_color();
@@ -204,21 +185,22 @@ int main(int argc, char *argv[]){
 	    case KEY_UP:
 		movimiento2.x = 0;
 		movimiento2.y = -1;
-		MoverJugador2Arriba(jugador2, movimiento2);
+		MoverJugadorArriba(jugador2, movimiento2);
 		break;
 
 	    case KEY_DOWN:  // ----------------------------- FUNCIONA MAL, SE BAJA TAMBIEN EL USUARIO 1. ----------------------
 		movimiento2.x = 0;
 		movimiento2.y = 1;
-		MoverJugador2Abajo(jugador2, movimiento2);
+		MoverJugadorAbajo(jugador2, movimiento2);
 		break;
+
 
 	}
 
 	clear();
 	PintadoTablero();
 	MuestraJugador(jugador1);
-	MuestraJugador2(jugador2);
+	MuestraJugador(jugador2);
 
     }while(user_input = getch() != ESC);
     endwin(); // Finaliza el tablero de ncurses.
