@@ -146,17 +146,64 @@ void MoverJugadorAbajo(Coordenada jugador[MAX], Coordenada incremento){
 
 void MovimientoPelota( Coordenada jugador1[MAX], Coordenada jugador2[MAX], Pelota *pelota){
 
-    for(int i=0; i < MAX-1; i++){
-    if(pelota->posicion.y == jugador2[0].y && pelota->velocidad.x > 0 && (pelota->posicion.x)+1 == jugador2[0].x ){
+    for(int i=0; i <= MAX; i++){
+	if(i>=0 && i<2){
+	    if(pelota->posicion.y == jugador2[i].y && pelota->velocidad.x > 0 && (pelota->posicion.x)+1 == jugador2[i].x){
+		pelota->velocidad.x = -1;
+		pelota->velocidad.y = -1;
+		break;
+	    }
+	    else if(pelota->posicion.y == jugador1[i].y && pelota->velocidad.x < 0 && (pelota->posicion.x)-1 == jugador1[i].x){
+		pelota->velocidad.x =  1;
+		pelota->velocidad.y = -1;
+		break;
+	    }
+
+	}
+	else if(i==2){
+	    if(pelota->posicion.y == jugador2[i].y && pelota->velocidad.x > 0 && (pelota->posicion.x)+1 == jugador2[i].x){
+		pelota->velocidad.x = -1;
+		pelota->velocidad.y =  0;
+		break;
+	    }
+	    else if(pelota->posicion.y == jugador1[i].y && pelota->velocidad.x < 0 && (pelota->posicion.x)-1 == jugador1[i].x){
+		pelota->velocidad.x = 1;
+		pelota->velocidad.y = 0;
+		break;
+	    }
+	}
+	else if(i>2 && i<=MAX){
+	    if(pelota->posicion.y == jugador2[i].y && pelota->velocidad.x > 0 && (pelota->posicion.x)+1 == jugador2[i].x){
+		pelota->velocidad.x = -1;
+		pelota->velocidad.y =  1;
+		break;
+	    }
+	    else if(pelota->posicion.y == jugador1[i].y && pelota->velocidad.x < 0 && (pelota->posicion.x)-1 == jugador1[i].x){
+		pelota->velocidad.x = 1;
+		pelota->velocidad.y = 1;
+	    }
+	}
+    }
+} 
+
+bool LimitesPelota(Pelota *pelota){
+    if((pelota->posicion.y == 2 && pelota->velocidad.x < 0)){
+	pelota->velocidad.y =  1;
 	pelota->velocidad.x = -1;
-	pelota->velocidad.y = -2;
-	break;
     }
-    if(pelota->posicion.y == jugador2[i].y && pelota->velocidad.x > 0 && (pelota->posicion.x)+1 == jugador2[i].x)
-	pelota->velocidad.x = 1;
-    if(pelota->posicion.y == jugador1[i].y && pelota->velocidad.x < 0 && (pelota->posicion.x)-1 == jugador1[i].x)
+    if((pelota->posicion.y == 32 && pelota->velocidad.x < 0)){
+	pelota->velocidad.y = -1;
+	pelota->velocidad.x = -1;
+    }
+    if((pelota->posicion.y == 2 && pelota->velocidad.x > 0)){
+	pelota->velocidad.y = 1;
 	pelota->velocidad.x = 1;
     }
+    if((pelota->posicion.y == 32 && pelota->velocidad.x > 0)){
+	pelota->velocidad.y = -1;
+	pelota->velocidad.x =  1;
+    }
+
 }
 
 int main(int argc, char *argv[]){
@@ -164,7 +211,7 @@ int main(int argc, char *argv[]){
     int user_input = 0;
     Coordenada jugador1[MAX];
     Coordenada jugador2[MAX];
-    Pelota pelota = {10, 10};
+    Pelota pelota = {30, 17};
     Coordenada movimiento1 = {0 , 1};
     Coordenada movimiento2 = {0 , 1};
 
@@ -175,8 +222,6 @@ int main(int argc, char *argv[]){
     init_pair(2, COLOR_WHITE, COLOR_WHITE);
     init_pair(3, COLOR_WHITE, COLOR_BLACK);
 
-    // ------------------------------------NO FUNCIONA EL HALFDELAY-------------------------------------
-    //halfdelay(2);
     keypad(stdscr, TRUE); // Poder utilizar las flechas.
     noecho(); //No se muestre el caracter pulsado.
     curs_set(0); // Desaparecer el puntero.
@@ -190,11 +235,11 @@ int main(int argc, char *argv[]){
     }
     clear();   // Limpia la pantalla.
 
-    pelota.velocidad.x = 1;
+    pelota.velocidad.x = 2;
     pelota.velocidad.y = 0;
     //timeout ( 10 );
     do{
-	timeout(50);
+	timeout(100);
 	user_input = getch();
 	switch(user_input){    // Es lo mismo mayuscula que minuscula.
 	    case 'w':
@@ -228,9 +273,9 @@ int main(int argc, char *argv[]){
 
 	}
 
-
-
+	if(LimitesPelota(&pelota)){
 	MovimientoPelota(jugador1, jugador2, &pelota);
+	}
 	pelota.posicion.x += pelota.velocidad.x; 
 	pelota.posicion.y += pelota.velocidad.y;
 	erase();
