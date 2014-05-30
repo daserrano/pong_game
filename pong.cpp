@@ -276,14 +276,13 @@ int main(int argc, char *argv[]){
 	if(LimitesPelota(&pelota)){
 	MovimientoPelota(jugador1, jugador2, &pelota);
 	}
-	if(pelota.posicion.x < 2){
+	if(pelota.posicion.x < 4){
 	    pelota.posicion.x = 49;
 	    pelota.posicion.y = 17;
-	    if(pelota.posicion.x > 32){ // NO FUNCIONA
-		pelota.posicion.x = 49;
-		pelota.posicion.y = 17;
-
-	    }
+	}
+	else if(pelota.posicion.x > 100){ // NO FUNCIONA
+	    pelota.posicion.x = 49;
+	    pelota.posicion.y = 17;
 	}
 	pelota.posicion.x += pelota.velocidad.x; 
 	pelota.posicion.y += pelota.velocidad.y;
