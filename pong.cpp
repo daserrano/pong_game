@@ -263,7 +263,7 @@ int main(int argc, char *argv[]){
 		    MoverJugadorArriba(jugador2, movimiento2);
 		break;
 
-	    case KEY_DOWN:  // ----------------------------- FUNCIONA MAL, SE BAJA TAMBIEN EL USUARIO 1. ----------------------
+	    case KEY_DOWN:
 		movimiento2.x = 0;
 		movimiento2.y = 1;
 		if(jugador2[MAX-1].y < 32)
@@ -275,6 +275,15 @@ int main(int argc, char *argv[]){
 
 	if(LimitesPelota(&pelota)){
 	MovimientoPelota(jugador1, jugador2, &pelota);
+	}
+	if(pelota.posicion.x < 2){
+	    pelota.posicion.x = 49;
+	    pelota.posicion.y = 17;
+	    if(pelota.posicion.x > 32){ // NO FUNCIONA
+		pelota.posicion.x = 49;
+		pelota.posicion.y = 17;
+
+	    }
 	}
 	pelota.posicion.x += pelota.velocidad.x; 
 	pelota.posicion.y += pelota.velocidad.y;
