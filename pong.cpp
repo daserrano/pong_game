@@ -99,29 +99,19 @@ void RellenarJugador2(Coordenada jugador2[MAX]){
 }
  
 void MuestraJugador(Coordenada jugador1[MAX]){
-    /*clear();
-      PintadoTablero();
-     */
-    attron(COLOR_PAIR(2));
+
     for(int i=0; i < MAX; i++)
-
 	mvprintw(jugador1[i].y, jugador1[i].x, "||");
-
-    attroff(COLOR_PAIR(2));
+    
     refresh();
 
 }
 
 void MuestraJugador2(Coordenada jugador2[MAX]){
-    /* clear();
-       PintadoTablero();
-     */
-    attron(COLOR_PAIR(2));
+
     for(int i=0; i < MAX; i++)
-
 	mvprintw(jugador2[i].y, jugador2[i].x, "||");
-
-    attroff(COLOR_PAIR(2));
+    
     refresh();
 
 }
@@ -184,6 +174,13 @@ void MovimientoPelota( Coordenada jugador1[MAX], Coordenada jugador2[MAX], Pelot
 	    }
 	}
     }
+}
+
+void ReinicioPelota(Pelota *pelota){
+    pelota->posicion.x  = 49;
+    pelota->posicion.y  = 17;
+    pelota->velocidad.y =  0;
+
 } 
 
 bool LimitesPelota(Pelota *pelota){
@@ -208,23 +205,33 @@ bool LimitesPelota(Pelota *pelota){
 
 int main(int argc, char *argv[]){
 
+    char opcion = 0;
     int user_input = 0;
+
+
     Coordenada jugador1[MAX];
     Coordenada jugador2[MAX];
     Pelota pelota = {30, 17};
     Coordenada movimiento1 = {0 , 1};
     Coordenada movimiento2 = {0 , 1};
 
+    static int puntuacionJugador1 = 0, puntuacionJugador2 = 0;
+
     initscr(); // iniciar tablero de ncurses.
     start_color();
 
-    init_pair(1, COLOR_BLUE, COLOR_BLUE); // Colorear.
+    init_pair(1, COLOR_RED, COLOR_RED); // Colorear.
     init_pair(2, COLOR_WHITE, COLOR_WHITE);
     init_pair(3, COLOR_WHITE, COLOR_BLACK);
+    init_pair(4, COLOR_BLUE, COLOR_BLUE);
+    init_pair(5, COLOR_YELLOW, COLOR_YELLOW);
+    init_pair(6, COLOR_BLUE, COLOR_BLACK);
+    init_pair(7, COLOR_YELLOW, COLOR_BLACK);
 
     keypad(stdscr, TRUE); // Poder utilizar las flechas.
     noecho(); //No se muestre el caracter pulsado.
     curs_set(0); // Desaparecer el puntero.
+
 
     RellenarJugador1(jugador1);
     RellenarJugador2(jugador2);
@@ -235,9 +242,9 @@ int main(int argc, char *argv[]){
     }
     clear();   // Limpia la pantalla.
 
-    pelota.velocidad.x = 2;
+    do{
+    pelota.velocidad.x = 1;
     pelota.velocidad.y = 0;
-    //timeout ( 10 );
     do{
 	timeout(100);
 	user_input = getch();
@@ -270,28 +277,49 @@ int main(int argc, char *argv[]){
 		    MoverJugadorAbajo(jugador2, movimiento2);
 		break;
 
-
 	}
 
-	if(LimitesPelota(&pelota)){
-	MovimientoPelota(jugador1, jugador2, &pelota);
-	}
+
+
 	if(pelota.posicion.x < 4){
-	    pelota.posicion.x = 49;
-	    pelota.posicion.y = 17;
+	    ReinicioPelota(&pelota);
+	    pelota.velocidad.x = -1;
+	    puntuacionJugador2++;
+
 	}
-	else if(pelota.posicion.x > 100){ // NO FUNCIONA
-	    pelota.posicion.x = 49;
-	    pelota.posicion.y = 17;
+	else if(pelota.posicion.x > 93){ 
+	    ReinicioPelota(&pelota);
+	    pelota.velocidad.x = 1;
+	    puntuacionJugador1++;
+	}
+	if(LimitesPelota(&pelota)){
+	    MovimientoPelota(jugador1, jugador2, &pelota);
 	}
 	pelota.posicion.x += pelota.velocidad.x; 
 	pelota.posicion.y += pelota.velocidad.y;
 	erase();
 	PintadoTablero(pelota);
+	attron(COLOR_PAIR(4));
 	MuestraJugador(jugador1);
+	attroff(COLOR_PAIR(4));
+	attron(COLOR_PAIR(5));
 	MuestraJugador(jugador2);
+	attroff(COLOR_PAIR(5));
 
-    }while(user_input != ESC);
+	attron(COLOR_PAIR(6));
+	mvprintw(36, 45, "%i", puntuacionJugador1);
+	attroff(COLOR_PAIR(6));
+	mvprintw(36, 48, "-");
+	attron(COLOR_PAIR(7));
+	mvprintw(36, 51, "%i", puntuacionJugador2);
+	attroff(COLOR_PAIR(7));
+
+    }while(user_input != ESC && (puntuacionJugador1 < 7 && puntuacionJugador2 < 7));
+    timeout(1000000000);
+    mvprintw(36, 60, "¿Jugar otra partida? s/n ");
+    scanw(" %c", &opcion);
+
+    }while (opcion != 's');
     endwin(); // Finaliza el tablero de ncurses.
 
     return EXIT_SUCCESS;
