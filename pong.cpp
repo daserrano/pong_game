@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <ctype.h>
+#include <stdio_ext.h>
 
 #define MAXLINES 40
 #define ESC 27
@@ -286,13 +287,13 @@ int main(int argc, char *argv[]){
 	    pelota.velocidad.x = -1;
 	    puntuacionJugador2++;
 
-	}
+	} 
 	else if(pelota.posicion.x > 93){ 
 	    ReinicioPelota(&pelota);
 	    pelota.velocidad.x = 1;
 	    puntuacionJugador1++;
 	}
-	if(LimitesPelota(&pelota)){
+	if(LimitesPelota( &pelota)){
 	    MovimientoPelota(jugador1, jugador2, &pelota);
 	}
 	pelota.posicion.x += pelota.velocidad.x; 
@@ -316,10 +317,20 @@ int main(int argc, char *argv[]){
 
     }while(user_input != ESC && (puntuacionJugador1 < 7 && puntuacionJugador2 < 7));
     timeout(1000000000);
-    mvprintw(36, 60, "¿Jugar otra partida? s/n ");
-    scanw(" %c", &opcion);
+    //clear();
+    mvprintw(36, 59, "¿Jugar otra partida? s/n ");
+    refresh();
+    __fpurge(stdin);
+    opcion = getchar();
+    __fpurge(stdin);
 
-    }while (opcion != 's');
+    if(opcion == 's'){
+	puntuacionJugador1 = 0;
+    	puntuacionJugador2 = 0;
+	pelota.posicion.x = 45;
+	pelota.posicion.y = 17;
+    }
+    }while (opcion != 'n');
     endwin(); // Finaliza el tablero de ncurses.
 
     return EXIT_SUCCESS;
