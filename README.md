@@ -5,8 +5,11 @@ Pong Game
 It is one of the earliest arcade video games.
 
 Developer: Atari Inc.
+
 Designer: Allan Alcorn
+
 Release date: 1972
+
 Genre: Sports
 
 =========
@@ -14,6 +17,7 @@ Genre: Sports
 Now, with a some updates.
 
 Developer: daserrano
+
 Date: May 2014
 
 =========
