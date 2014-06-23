@@ -1,10 +1,36 @@
-pong_game
+Pong Game
+
 =========
 
-The first game in the history
+It is one of the earliest arcade video games.
+
+Developer: Atari Inc.
+Designer: Allan Alcorn
+Release date: 1972
+Genre: Sports
+
+=========
+
+Now, with a some updates.
+
+Developer: daserrano
+Date: May 2014
+
+=========
+
+How to play?
+
+First at all, download ncurses library:
+
+		sudo apt-get install libncurses5-dev
 
 
-The game is finished! 
+After that, you need the pong repository:
+		
+		git clone https://github.com/daserrano/pong_game
 
 
-But can be improved with the move of ball.
+To compilate:
+		
+		g++ pong.cpp -o  pong -lncurses
+
